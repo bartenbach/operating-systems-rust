@@ -1,0 +1,6 @@
+[package]
+name = "seeker"
+description = "Rust program to emulate HDD seek algorithms"
+version = "0.0.1"
+authors = [ "Blake Bartenbach <blakebartenbach@gmail.com>" ]
+publish = false
