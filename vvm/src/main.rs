@@ -1,15 +1,5 @@
 #![warn(clippy::pedantic)]
 
-/**
-
-
-TODO: One paging queue
-still need other lists for deciding which pages to take from master queue.
-only difference is, processes can now share pages.
-
-won't this increase the hit rate even more??
-
-**/
 use ::bounded_vec_deque::BoundedVecDeque;
 use clap::Parser;
 use std::error::Error;
@@ -38,7 +28,7 @@ struct ProcessData {
 fn main() {
     let opts: Opts = Opts::parse();
     let data: Result<String, Box<dyn Error>> = parse_file(opts.input_file);
-    let _values = format!(":{} {} {} {}", opts.pid1, opts.pid2, opts.pid3, opts.pid4);
+    let values = format!(":{} {} {} {}", opts.pid1, opts.pid2, opts.pid3, opts.pid4);
     let mut p1 = ProcessData {
         queue: BoundedVecDeque::new(opts.pid1),
         hit: 0.0,
@@ -71,7 +61,7 @@ fn main() {
         }
     }
     generate_reports(&mut Vec::from([p1, p2, p3, p4]));
-    //println!("{}", values);
+    println!(" args: {}", values);
 }
 
 fn lru(p: &mut ProcessData, req: Option<&str>) {
@@ -96,9 +86,9 @@ fn generate_reports(data: &mut Vec<ProcessData>) {
     for p in data {
         p.rate = p.hit / (p.miss + p.hit);
         total += p.rate * 100.0;
-        print!("{} ", p.rate * 100.0);
+        //print!("{} ", p.rate * 100.0);
     }
-    println!("AVG={}%", total / 4.0);
+    print!("{}", total / 4.0);
 }
 
 fn parse_file(input_file: String) -> Result<String, Box<dyn Error>> {
